@@ -1,62 +1,45 @@
-const posts = [
-  { title: "post one", body: "this is post one" },
-  { title: "post two", body: "this is post two" },
-];
+console.log("person1: show ticket");
+console.log("person2: show ticket");
 
-let lastActivityTime = new Date();
-
-function getPosts() {
-  setTimeout(() => {
-    let output = "";
-    posts.forEach((post, index) => {
-      output += `<li>${post.title}</li>`;
-    });
-    document.body.innerHTML = output;
-  }, 1000);
-}
-
-function createPost(post) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      posts.push(post);
-      resolve();
-    }, 2000);
+const preMovie = async () => {
+  const promiseWifeBringingTicket = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("ticket"), 3000);
   });
-}
 
-function updateLastUserActivityTime() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      lastActivityTime = new Date();
-      resolve(lastActivityTime);
-    }, 1000);
-  });
-}
+  const getPopcorn = new Promise((resolve, reject) => resolve("popcorn"));
+  const addButter = new Promise((resolve, reject) => resolve("butter"));
+  const getColdDrinks = new Promise((resolve, reject) =>
+    resolve("Cold Drinks")
+  );
 
-function deletePost() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (posts.length > 0) {
-        posts.pop();
-        resolve();
-      } else {
-        reject("No posts to delete");
-      }
-    }, 1500);
-  });
-}
+  let ticket = await promiseWifeBringingTicket;
 
-Promise.all([
-  createPost({ title: "post three", body: "this is post three" }),
-  updateLastUserActivityTime(),
-])
-  .then(([_, lastActivity]) => {
-    console.log("All posts:", posts);
-    console.log("Last Activity Time:", lastActivity);
-    return deletePost();
-  })
-  .then(() => {
-    console.log("Post deleted");
-    console.log("Remaining posts:", posts);
-  })
-  .catch((err) => console.log(err));
+  let [popcorn, butter, drinks] = await Promise.all([
+    getPopcorn,
+    addButter,
+    getColdDrinks,
+  ]);
+
+  console.log(`wife: I have the ${ticket}`);
+  console.log("husband: We should go in");
+  console.log("wife: No, I am hungry");
+
+  console.log(`husband: I got some ${popcorn}`);
+  console.log("husband: We should go in");
+  console.log("wife: I need butter on my popcorn");
+
+  console.log(`husband: I got some ${butter}`);
+  console.log("husband: Anything else, darling?");
+  console.log("wife: Let's go we are getting late");
+  console.log("husband: Thank you for the reminder *grins*");
+
+  console.log(`husband: I got some ${drinks}`);
+  console.log("husband: Now we're all set!");
+
+  return ticket;
+};
+
+preMovie().then((m) => console.log(`person3: shows ${m}`));
+
+console.log("person4: show ticket");
+console.log("person5: show ticket");
